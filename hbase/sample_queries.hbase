@@ -1,0 +1,26 @@
+# Sample HBase shell queries (run after load_hbase.py)
+#   docker exec -it ecom-hbase hbase shell
+# then paste these lines.
+
+# 1. Row counts (slow on big tables - fine for a demo)
+count 'user_sessions', INTERVAL => 50000
+count 'product_metrics', INTERVAL => 50000
+
+# 2. The 5 most recent sessions of one user, summary family only.
+#    Prefix scan + reverse timestamp => newest first, LIMIT stops early.
+scan 'user_sessions', {ROWPREFIXFILTER => 'user_000042#', COLUMNS => ['s'], LIMIT => 5}
+
+# 3. Only selected columns of a user's sessions (device + outcome)
+scan 'user_sessions', {ROWPREFIXFILTER => 'user_000042#', COLUMNS => ['s:start_time', 's:device', 's:status']}
+
+# 4. Sessions that converted, for one user (server-side value filter)
+scan 'user_sessions', {ROWPREFIXFILTER => 'user_000042#', COLUMNS => ['s:start_time', 's:status'], FILTER => "SingleColumnValueFilter('s', 'status', =, 'binary:converted')"}
+
+# 5. Full page-view path of one session (copy a row key from query 2)
+#    get 'user_sessions', 'user_000042#9223370...#sess_...', {COLUMNS => ['p', 'c']}
+
+# 6. One product's daily metrics for October 2026 (STOPROW is exclusive)
+scan 'product_metrics', {STARTROW => 'prod_00123#20261001', STOPROW => 'prod_00123#20261101'}
+
+# 7. A single day for a single product
+get 'product_metrics', 'prod_00123#20261015'

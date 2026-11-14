@@ -1,0 +1,166 @@
+{
+  "top_by_units": [
+    {
+      "units": 84,
+      "orders": 40,
+      "product_id": "prod_03601",
+      "name": "Robust Coherent Pricing Structure",
+      "category": "Patterson, Smith and Jones",
+      "revenue": 17014.2
+    },
+    {
+      "units": 83,
+      "orders": 40,
+      "product_id": "prod_03142",
+      "name": "Synchronized Methodical Database",
+      "category": "Hancock Inc",
+      "revenue": 10399.9
+    },
+    {
+      "units": 81,
+      "orders": 39,
+      "product_id": "prod_04680",
+      "name": "Fundamental Cohesive Software",
+      "category": "Ellis, Baker and Wright",
+      "revenue": 38151.81
+    },
+    {
+      "units": 80,
+      "orders": 38,
+      "product_id": "prod_00342",
+      "name": "Balanced Foreground Function",
+      "category": "King-Odonnell",
+      "revenue": 11228.8
+    },
+    {
+      "units": 80,
+      "orders": 37,
+      "product_id": "prod_03943",
+      "name": "Robust Fresh-Thinking Function",
+      "category": "James LLC",
+      "revenue": 24113.6
+    },
+    {
+      "units": 80,
+      "orders": 40,
+      "product_id": "prod_03220",
+      "name": "Triple-Buffered Dynamic Task-Force",
+      "category": "Anderson, Walls and Duncan",
+      "revenue": 13431.2
+    },
+    {
+      "units": 79,
+      "orders": 34,
+      "product_id": "prod_01358",
+      "name": "Devolved Intermediate Throughput",
+      "category": "Carney-Santos",
+      "revenue": 3882.85
+    },
+    {
+      "units": 78,
+      "orders": 38,
+      "product_id": "prod_04940",
+      "name": "Advanced Exuding Artificial Intelligence",
+      "category": "Mitchell-Kim",
+      "revenue": 43513.86
+    },
+    {
+      "units": 78,
+      "orders": 39,
+      "product_id": "prod_00860",
+      "name": "Exclusive Even-Keeled Hub",
+      "category": "Brewer, Bryant and Hickman",
+      "revenue": 17418.18
+    },
+    {
+      "units": 78,
+      "orders": 37,
+      "product_id": "prod_02144",
+      "name": "Exclusive Scalable Customer Loyalty",
+      "category": "King-Odonnell",
+      "revenue": 19568.64
+    }
+  ],
+  "top_by_revenue": [
+    {
+      "units": 78,
+      "orders": 38,
+      "product_id": "prod_04940",
+      "name": "Advanced Exuding Artificial Intelligence",
+      "category": "Mitchell-Kim",
+      "revenue": 43513.86
+    },
+    {
+      "units": 69,
+      "orders": 34,
+      "product_id": "prod_01416",
+      "name": "Seamless Analyzing Benchmark",
+      "category": "Brewer, Bryant and Hickman",
+      "revenue": 40211.82
+    },
+    {
+      "units": 81,
+      "orders": 39,
+      "product_id": "prod_04680",
+      "name": "Fundamental Cohesive Software",
+      "category": "Ellis, Baker and Wright",
+      "revenue": 38151.81
+    },
+    {
+      "units": 67,
+      "orders": 32,
+      "product_id": "prod_01950",
+      "name": "Innovative Background Capacity",
+      "category": "Owens-Daniel",
+      "revenue": 36283.18
+    },
+    {
+      "units": 63,
+      "orders": 28,
+      "product_id": "prod_00245",
+      "name": "User-Friendly Multi-Tasking Data-Warehouse",
+      "category": "Cameron-Parsons",
+      "revenue": 35345.52
+    },
+    {
+      "units": 72,
+      "orders": 32,
+      "product_id": "prod_00138",
+      "name": "De-Engineered Executive Intranet",
+      "category": "Brewer, Bryant and Hickman",
+      "revenue": 35212.32
+    },
+    {
+      "units": 70,
+      "orders": 31,
+      "product_id": "prod_04558",
+      "name": "Progressive Methodical Open Architecture",
+      "category": "Preston Ltd",
+      "revenue": 34300.0
+    },
+    {
+      "units": 71,
+      "orders": 35,
+      "product_id": "prod_03175",
+      "name": "Team-Oriented Motivating Installation",
+      "category": "Phillips Inc",
+      "revenue": 34092.78
+    },
+    {
+      "units": 68,
+      "orders": 30,
+      "product_id": "prod_03275",
+      "name": "User-Friendly Modular Database",
+      "category": "Kelly-Santiago",
+      "revenue": 33987.76
+    },
+    {
+      "units": 76,
+      "orders": 35,
+      "product_id": "prod_03495",
+      "name": "Digitized Mission-Critical Complexity",
+      "category": "Bush Inc",
+      "revenue": 33842.04
+    }
+  ]
+}

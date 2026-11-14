@@ -1,0 +1,6 @@
+stage,sessions,pct_of_sessions,pct_of_previous
+1_session,100000,1.0,1.0
+2_viewed_product,98735,0.9873,0.9873
+3_added_to_cart,64870,0.6487,0.657
+4_reached_checkout,28923,0.2892,0.4459
+5_purchased,20274,0.2027,0.701

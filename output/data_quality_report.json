@@ -1,0 +1,35 @@
+{
+  "users": {
+    "raw": 10000,
+    "clean": 10000,
+    "geo_inconsistent": 9962
+  },
+  "products": {
+    "raw": 5000,
+    "clean": 5000,
+    "inactive": 234,
+    "out_of_stock": 154
+  },
+  "sessions": {
+    "clean": 200000,
+    "page_views": 1998938,
+    "by_status": {
+      "converted": 40531,
+      "abandoned": 89019,
+      "browsed": 70450
+    }
+  },
+  "transactions": {
+    "raw": 50000,
+    "clean": 50000,
+    "session_linked": 25193,
+    "subtotal_mismatch": 0,
+    "total_mismatch": 0,
+    "items": 109693,
+    "items_unknown_product": 0,
+    "timestamp_after_last_session_start": 5
+  },
+  "cross_checks": {
+    "converted_sessions_without_transaction": 15338
+  }
+}

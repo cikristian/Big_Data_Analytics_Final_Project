@@ -1,0 +1,16 @@
+device_type,referrer,sessions,cart_rate,checkout_rate,order_rate,revenue_per_session
+desktop,direct,13377,0.6457,0.4425,0.1304,102.22
+tablet,affiliate,13261,0.6454,0.4322,0.13,105.78
+mobile,search_engine,13499,0.6505,0.4348,0.1299,99.49
+desktop,affiliate,13099,0.6506,0.439,0.1288,102.14
+mobile,social,13254,0.6625,0.4322,0.1274,100.73
+desktop,social,13300,0.6548,0.4396,0.1271,98.38
+desktop,search_engine,13284,0.6436,0.4381,0.1267,97.36
+mobile,affiliate,13394,0.6551,0.4387,0.1258,96.57
+tablet,search_engine,13424,0.6445,0.435,0.1253,97.27
+mobile,direct,13386,0.6402,0.4386,0.1251,97.03
+desktop,email,13401,0.6408,0.4287,0.1248,95.94
+tablet,email,13290,0.6482,0.4389,0.1242,96.06
+tablet,direct,13408,0.6429,0.4379,0.1215,91.11
+tablet,social,13196,0.646,0.4326,0.1215,95.18
+mobile,email,13427,0.6454,0.4349,0.121,95.27

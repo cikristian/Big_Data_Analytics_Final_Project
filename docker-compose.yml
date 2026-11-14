@@ -1,0 +1,32 @@
+# MongoDB + single-node HBase (with Thrift for Python access).
+#   docker compose up -d
+#   MongoDB      -> localhost:27017
+#   HBase Thrift -> localhost:9090   (used by happybase)
+#   HBase UI     -> http://localhost:16010
+#
+# Apple Silicon (M1/M2/M3): the HBase image is amd64-only; the
+# `platform` line below makes Docker run it under emulation.
+services:
+  mongodb:
+    image: mongo:7
+    container_name: ecom-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  hbase:
+    image: harisekhon/hbase:2.1
+    platform: linux/amd64
+    container_name: ecom-hbase
+    hostname: hbase
+    ports:
+      - "2181:2181"    # ZooKeeper
+      - "9090:9090"    # Thrift API (happybase)
+      - "16000:16000"  # Master
+      - "16010:16010"  # Master web UI
+      - "16020:16020"  # RegionServer
+      - "16030:16030"  # RegionServer web UI
+
+volumes:
+  mongo-data:

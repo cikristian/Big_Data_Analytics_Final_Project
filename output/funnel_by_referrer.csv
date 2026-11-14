@@ -1,0 +1,6 @@
+referrer,1_session,2_viewed_product,3_added_to_cart,4_reached_checkout,5_purchased,view_to_purchase,checkout_to_purchase
+search_engine,19905,19640,12894,5790,4093,0.2084,0.7069
+direct,19951,19731,12852,5784,4050,0.2053,0.7002
+social,19999,19751,13084,5865,4051,0.2051,0.6907
+affiliate,20072,19805,13073,5795,4097,0.2069,0.707
+email,20073,19808,12967,5689,3983,0.2011,0.7001

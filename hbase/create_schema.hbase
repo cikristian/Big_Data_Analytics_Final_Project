@@ -1,0 +1,45 @@
+# HBase schema for the e-commerce project.
+# Run inside the container:
+#   docker exec -i ecom-hbase hbase shell < hbase/create_schema.hbase
+# (load_hbase.py also creates the tables automatically if they are missing.)
+
+# ---------------------------------------------------------------------------
+# Table 1: user_sessions  - time-series browsing activity per user
+#
+# Row key : <user_id>#<reverse_timestamp>#<session_id>
+#           e.g. user_000042#9223370274081163807#sess_a7b3c9d8e2
+#   * user_id prefix      -> all sessions of a user are contiguous (one scan)
+#   * reverse timestamp   -> newest session sorts FIRST (Long.MAX - epoch_ms)
+#   * session_id suffix   -> uniqueness if two sessions start the same ms
+#
+# Column families (few, grouped by how they are read):
+#   s : session summary  (small, read by almost every query)
+#   p : page views       (wide + sparse: one column per page view, p:000, p:001 ...)
+#   c : cart contents    (sparse: one column per product in the cart)
+# VERSIONS => 1 : sessions are immutable events, no need for cell history.
+# Pre-split on user_id ranges so writes spread across regions from the start.
+# ---------------------------------------------------------------------------
+disable 'user_sessions' rescue nil
+drop 'user_sessions' rescue nil
+create 'user_sessions',
+  {NAME => 's', VERSIONS => 1, BLOOMFILTER => 'ROW'},
+  {NAME => 'p', VERSIONS => 1},
+  {NAME => 'c', VERSIONS => 1},
+  {SPLITS => ['user_002000', 'user_004000', 'user_006000', 'user_008000']}
+
+# ---------------------------------------------------------------------------
+# Table 2: product_metrics - daily performance counters per product
+#
+# Row key : <product_id>#<yyyyMMdd>     e.g. prod_00123#20261015
+#   * product prefix + sortable date -> a date-range scan returns one
+#     product's daily time series in order
+# Column family m : views, cart_adds, purchases, units_sold, revenue
+# ---------------------------------------------------------------------------
+disable 'product_metrics' rescue nil
+drop 'product_metrics' rescue nil
+create 'product_metrics',
+  {NAME => 'm', VERSIONS => 1},
+  {SPLITS => ['prod_01000', 'prod_02000', 'prod_03000', 'prod_04000']}
+
+list
+describe 'user_sessions'

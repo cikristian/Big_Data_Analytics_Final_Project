@@ -1,0 +1,295 @@
+== Physical Plan ==
+AdaptiveSparkPlan (48)
++- Sort (47)
+   +- Window (46)
+      +- Sort (45)
+         +- Window (44)
+            +- Sort (43)
+               +- Exchange (42)
+                  +- Project (41)
+                     +- BroadcastHashJoin Inner BuildRight (40)
+                        :- Project (30)
+                        :  +- SortMergeJoin Inner (29)
+                        :     :- Sort (17)
+                        :     :  +- Project (16)
+                        :     :     +- BroadcastHashJoin Inner BuildLeft (15)
+                        :     :        :- BroadcastExchange (3)
+                        :     :        :  +- Filter (2)
+                        :     :        :     +- Scan parquet  (1)
+                        :     :        +- HashAggregate (14)
+                        :     :           +- Exchange (13)
+                        :     :              +- HashAggregate (12)
+                        :     :                 +- Project (11)
+                        :     :                    +- BroadcastHashJoin Inner BuildRight (10)
+                        :     :                       :- Project (6)
+                        :     :                       :  +- Filter (5)
+                        :     :                       :     +- Scan parquet  (4)
+                        :     :                       +- BroadcastExchange (9)
+                        :     :                          +- Filter (8)
+                        :     :                             +- Scan parquet  (7)
+                        :     +- Sort (28)
+                        :        +- HashAggregate (27)
+                        :           +- Exchange (26)
+                        :              +- HashAggregate (25)
+                        :                 +- Project (24)
+                        :                    +- BroadcastHashJoin Inner BuildRight (23)
+                        :                       :- Filter (19)
+                        :                       :  +- Scan parquet  (18)
+                        :                       +- BroadcastExchange (22)
+                        :                          +- Filter (21)
+                        :                             +- Scan parquet  (20)
+                        +- BroadcastExchange (39)
+                           +- HashAggregate (38)
+                              +- Exchange (37)
+                                 +- HashAggregate (36)
+                                    +- HashAggregate (35)
+                                       +- Exchange (34)
+                                          +- HashAggregate (33)
+                                             +- Filter (32)
+                                                +- Scan parquet  (31)
+
+
+(1) Scan parquet 
+Output [2]: [category_id#13, category_name#14]
+Batched: true
+Location: InMemoryFileIndex [file:/C:/projects/ecommerce-analytics/data/clean/categories]
+PushedFilters: [IsNotNull(category_id)]
+ReadSchema: struct<category_id:string,category_name:string>
+
+(2) Filter
+Input [2]: [category_id#13, category_name#14]
+Condition : isnotnull(category_id#13)
+
+(3) BroadcastExchange
+Input [2]: [category_id#13, category_name#14]
+Arguments: HashedRelationBroadcastMode(List(input[0, string, false]),false), [plan_id=5118]
+
+(4) Scan parquet 
+Output [3]: [page_type#72, product_id#73, event_date#76]
+Batched: true
+Location: InMemoryFileIndex [file:/C:/projects/ecommerce-analytics/data/clean/page_views]
+PushedFilters: [IsNotNull(page_type), EqualTo(page_type,product_detail), IsNotNull(product_id)]
+ReadSchema: struct<page_type:string,product_id:string>
+
+(5) Filter
+Input [3]: [page_type#72, product_id#73, event_date#76]
+Condition : ((isnotnull(page_type#72) AND (page_type#72 = product_detail)) AND isnotnull(product_id#73))
+
+(6) Project
+Output [1]: [product_id#73]
+Input [3]: [page_type#72, product_id#73, event_date#76]
+
+(7) Scan parquet 
+Output [2]: [product_id#0, category_id#2]
+Batched: true
+Location: InMemoryFileIndex [file:/C:/projects/ecommerce-analytics/data/clean/products]
+PushedFilters: [IsNotNull(product_id), IsNotNull(category_id)]
+ReadSchema: struct<product_id:string,category_id:string>
+
+(8) Filter
+Input [2]: [product_id#0, category_id#2]
+Condition : (isnotnull(product_id#0) AND isnotnull(category_id#2))
+
+(9) BroadcastExchange
+Input [2]: [product_id#0, category_id#2]
+Arguments: HashedRelationBroadcastMode(List(input[0, string, false]),false), [plan_id=5110]
+
+(10) BroadcastHashJoin
+Left keys [1]: [product_id#73]
+Right keys [1]: [product_id#0]
+Join type: Inner
+Join condition: None
+
+(11) Project
+Output [1]: [category_id#2]
+Input [3]: [product_id#73, product_id#0, category_id#2]
+
+(12) HashAggregate
+Input [1]: [category_id#2]
+Keys [1]: [category_id#2]
+Functions [1]: [partial_count(1)]
+Aggregate Attributes [1]: [count#955L]
+Results [2]: [category_id#2, count#956L]
+
+(13) Exchange
+Input [2]: [category_id#2, count#956L]
+Arguments: hashpartitioning(category_id#2, 8), ENSURE_REQUIREMENTS, [plan_id=5115]
+
+(14) HashAggregate
+Input [2]: [category_id#2, count#956L]
+Keys [1]: [category_id#2]
+Functions [1]: [count(1)]
+Aggregate Attributes [1]: [count(1)#933L]
+Results [2]: [category_id#2, count(1)#933L AS product_views#914L]
+
+(15) BroadcastHashJoin
+Left keys [1]: [category_id#13]
+Right keys [1]: [category_id#2]
+Join type: Inner
+Join condition: None
+
+(16) Project
+Output [3]: [category_id#13, category_name#14, product_views#914L]
+Input [4]: [category_id#13, category_name#14, category_id#2, product_views#914L]
+
+(17) Sort
+Input [3]: [category_id#13, category_name#14, product_views#914L]
+Arguments: [category_id#13 ASC NULLS FIRST], false, 0
+
+(18) Scan parquet 
+Output [2]: [product_id#79, quantity#80]
+Batched: true
+Location: InMemoryFileIndex [file:/C:/projects/ecommerce-analytics/data/clean/session_cart]
+PushedFilters: [IsNotNull(product_id)]
+ReadSchema: struct<product_id:string,quantity:int>
+
+(19) Filter
+Input [2]: [product_id#79, quantity#80]
+Condition : isnotnull(product_id#79)
+
+(20) Scan parquet 
+Output [2]: [product_id#920, category_id#922]
+Batched: true
+Location: InMemoryFileIndex [file:/C:/projects/ecommerce-analytics/data/clean/products]
+PushedFilters: [IsNotNull(product_id), IsNotNull(category_id)]
+ReadSchema: struct<product_id:string,category_id:string>
+
+(21) Filter
+Input [2]: [product_id#920, category_id#922]
+Condition : (isnotnull(product_id#920) AND isnotnull(category_id#922))
+
+(22) BroadcastExchange
+Input [2]: [product_id#920, category_id#922]
+Arguments: HashedRelationBroadcastMode(List(input[0, string, false]),false), [plan_id=5121]
+
+(23) BroadcastHashJoin
+Left keys [1]: [product_id#79]
+Right keys [1]: [product_id#920]
+Join type: Inner
+Join condition: None
+
+(24) Project
+Output [2]: [quantity#80, category_id#922]
+Input [4]: [product_id#79, quantity#80, product_id#920, category_id#922]
+
+(25) HashAggregate
+Input [2]: [quantity#80, category_id#922]
+Keys [1]: [category_id#922]
+Functions [1]: [partial_sum(quantity#80)]
+Aggregate Attributes [1]: [sum#957L]
+Results [2]: [category_id#922, sum#958L]
+
+(26) Exchange
+Input [2]: [category_id#922, sum#958L]
+Arguments: hashpartitioning(category_id#922, 8), ENSURE_REQUIREMENTS, [plan_id=5126]
+
+(27) HashAggregate
+Input [2]: [category_id#922, sum#958L]
+Keys [1]: [category_id#922]
+Functions [1]: [sum(quantity#80)]
+Aggregate Attributes [1]: [sum(quantity#80)#934L]
+Results [2]: [category_id#922, sum(quantity#80)#934L AS units_carted#915L]
+
+(28) Sort
+Input [2]: [category_id#922, units_carted#915L]
+Arguments: [category_id#922 ASC NULLS FIRST], false, 0
+
+(29) SortMergeJoin
+Left keys [1]: [category_id#13]
+Right keys [1]: [category_id#922]
+Join type: Inner
+Join condition: None
+
+(30) Project
+Output [4]: [category_id#13, category_name#14, product_views#914L, units_carted#915L]
+Input [5]: [category_id#13, category_name#14, product_views#914L, category_id#922, units_carted#915L]
+
+(31) Scan parquet 
+Output [5]: [transaction_id#41, quantity#45, line_total#47, category_id#48, profit_margin#50]
+Batched: true
+Location: InMemoryFileIndex [file:/C:/projects/ecommerce-analytics/data/clean/transaction_items]
+PushedFilters: [IsNotNull(category_id)]
+ReadSchema: struct<transaction_id:string,quantity:int,line_total:double,category_id:string,profit_margin:double>
+
+(32) Filter
+Input [5]: [transaction_id#41, quantity#45, line_total#47, category_id#48, profit_margin#50]
+Condition : isnotnull(category_id#48)
+
+(33) HashAggregate
+Input [5]: [transaction_id#41, quantity#45, line_total#47, category_id#48, profit_margin#50]
+Keys [2]: [category_id#48, transaction_id#41]
+Functions [3]: [partial_sum(quantity#45), partial_sum(line_total#47), partial_sum((line_total#47 * profit_margin#50))]
+Aggregate Attributes [3]: [sum(quantity#45)#935L, sum(line_total#47)#936, sum((line_total#47 * profit_margin#50))#937]
+Results [5]: [category_id#48, transaction_id#41, sum#960L, sum#962, sum#964]
+
+(34) Exchange
+Input [5]: [category_id#48, transaction_id#41, sum#960L, sum#962, sum#964]
+Arguments: hashpartitioning(category_id#48, transaction_id#41, 8), ENSURE_REQUIREMENTS, [plan_id=5134]
+
+(35) HashAggregate
+Input [5]: [category_id#48, transaction_id#41, sum#960L, sum#962, sum#964]
+Keys [2]: [category_id#48, transaction_id#41]
+Functions [3]: [merge_sum(quantity#45), merge_sum(line_total#47), merge_sum((line_total#47 * profit_margin#50))]
+Aggregate Attributes [3]: [sum(quantity#45)#935L, sum(line_total#47)#936, sum((line_total#47 * profit_margin#50))#937]
+Results [5]: [category_id#48, transaction_id#41, sum#960L, sum#962, sum#964]
+
+(36) HashAggregate
+Input [5]: [category_id#48, transaction_id#41, sum#960L, sum#962, sum#964]
+Keys [1]: [category_id#48]
+Functions [4]: [merge_sum(quantity#45), merge_sum(line_total#47), merge_sum((line_total#47 * profit_margin#50)), partial_count(distinct transaction_id#41)]
+Aggregate Attributes [4]: [sum(quantity#45)#935L, sum(line_total#47)#936, sum((line_total#47 * profit_margin#50))#937, count(transaction_id#41)#938L]
+Results [5]: [category_id#48, sum#960L, sum#962, sum#964, count#967L]
+
+(37) Exchange
+Input [5]: [category_id#48, sum#960L, sum#962, sum#964, count#967L]
+Arguments: hashpartitioning(category_id#48, 8), ENSURE_REQUIREMENTS, [plan_id=5138]
+
+(38) HashAggregate
+Input [5]: [category_id#48, sum#960L, sum#962, sum#964, count#967L]
+Keys [1]: [category_id#48]
+Functions [4]: [sum(quantity#45), sum(line_total#47), sum((line_total#47 * profit_margin#50)), count(distinct transaction_id#41)]
+Aggregate Attributes [4]: [sum(quantity#45)#935L, sum(line_total#47)#936, sum((line_total#47 * profit_margin#50))#937, count(transaction_id#41)#938L]
+Results [5]: [category_id#48, sum(quantity#45)#935L AS units_sold#916L, round(sum(line_total#47)#936, 2) AS revenue#917, round(sum((line_total#47 * profit_margin#50))#937, 2) AS est_profit#918, count(transaction_id#41)#938L AS orders#919L]
+
+(39) BroadcastExchange
+Input [5]: [category_id#48, units_sold#916L, revenue#917, est_profit#918, orders#919L]
+Arguments: HashedRelationBroadcastMode(List(input[0, string, true]),false), [plan_id=5141]
+
+(40) BroadcastHashJoin
+Left keys [1]: [category_id#13]
+Right keys [1]: [category_id#48]
+Join type: Inner
+Join condition: None
+
+(41) Project
+Output [11]: [category_id#13, category_name#14, product_views#914L, units_carted#915L, units_sold#916L, orders#919L, revenue#917, est_profit#918, round((est_profit#918 / revenue#917), 4) AS profit_margin#909, round((cast(units_carted#915L as double) / cast(product_views#914L as double)), 4) AS cart_units_per_view#910, round((cast(units_sold#916L as double) / cast(units_carted#915L as double)), 4) AS sold_per_carted_unit#911]
+Input [9]: [category_id#13, category_name#14, product_views#914L, units_carted#915L, category_id#48, units_sold#916L, revenue#917, est_profit#918, orders#919L]
+
+(42) Exchange
+Input [11]: [category_id#13, category_name#14, product_views#914L, units_carted#915L, units_sold#916L, orders#919L, revenue#917, est_profit#918, profit_margin#909, cart_units_per_view#910, sold_per_carted_unit#911]
+Arguments: SinglePartition, ENSURE_REQUIREMENTS, [plan_id=5145]
+
+(43) Sort
+Input [11]: [category_id#13, category_name#14, product_views#914L, units_carted#915L, units_sold#916L, orders#919L, revenue#917, est_profit#918, profit_margin#909, cart_units_per_view#910, sold_per_carted_unit#911]
+Arguments: [revenue#917 DESC NULLS LAST], false, 0
+
+(44) Window
+Input [11]: [category_id#13, category_name#14, product_views#914L, units_carted#915L, units_sold#916L, orders#919L, revenue#917, est_profit#918, profit_margin#909, cart_units_per_view#910, sold_per_carted_unit#911]
+Arguments: [rank(revenue#917) windowspecdefinition(revenue#917 DESC NULLS LAST, specifiedwindowframe(RowFrame, unboundedpreceding$(), currentrow$())) AS revenue_rank#912], [revenue#917 DESC NULLS LAST]
+
+(45) Sort
+Input [12]: [category_id#13, category_name#14, product_views#914L, units_carted#915L, units_sold#916L, orders#919L, revenue#917, est_profit#918, profit_margin#909, cart_units_per_view#910, sold_per_carted_unit#911, revenue_rank#912]
+Arguments: [est_profit#918 DESC NULLS LAST], false, 0
+
+(46) Window
+Input [12]: [category_id#13, category_name#14, product_views#914L, units_carted#915L, units_sold#916L, orders#919L, revenue#917, est_profit#918, profit_margin#909, cart_units_per_view#910, sold_per_carted_unit#911, revenue_rank#912]
+Arguments: [rank(est_profit#918) windowspecdefinition(est_profit#918 DESC NULLS LAST, specifiedwindowframe(RowFrame, unboundedpreceding$(), currentrow$())) AS profit_rank#913], [est_profit#918 DESC NULLS LAST]
+
+(47) Sort
+Input [13]: [category_id#13, category_name#14, product_views#914L, units_carted#915L, units_sold#916L, orders#919L, revenue#917, est_profit#918, profit_margin#909, cart_units_per_view#910, sold_per_carted_unit#911, revenue_rank#912, profit_rank#913]
+Arguments: [revenue_rank#912 ASC NULLS FIRST], true, 0
+
+(48) AdaptiveSparkPlan
+Output [13]: [category_id#13, category_name#14, product_views#914L, units_carted#915L, units_sold#916L, orders#919L, revenue#917, est_profit#918, profit_margin#909, cart_units_per_view#910, sold_per_carted_unit#911, revenue_rank#912, profit_rank#913]
+Arguments: isFinalPlan=false
+
